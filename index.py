@@ -119,6 +119,6 @@ for url in urls:
 print (len(houses))
 
 # 保存到文件
-houses = 'var houses = ' + str(houses)
-with open('./web/js/houses.js','wb') as jsname:
+houses = '// 自动生成\n' + 'var houses = ' + str(houses)
+with open('./docs/js/houses.js','wb') as jsname:
     jsname.write(bytes(houses, 'UTF-8'))
