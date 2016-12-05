@@ -14,11 +14,18 @@
 <script type="text/javascript" src="./js/houses.js"></script>
 <link rel="stylesheet" type="text/css" href="./css/amap.css">
 
+<script type="text/javascript">
+    window.addEventListener('load', function () {
+        var myScript= document.createElement("script");
+        myScript.type = "text/javascript";
+        myScript.src="./js/amap.js";
+        document.body.appendChild(myScript);
+    })
+</script>
+
 <body>
 
 <div id="container" tabindex="0"></div>
 
 </body>
-<script type="text/javascript" src="./js/amap.js"></script>
-
 </html>

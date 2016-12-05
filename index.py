@@ -76,9 +76,11 @@ def getPageSource (url):
     print ('获取网页源码 ' + url)
     response = requests.get(url)
 
-    # 解决乱码 http://sh3ll.me/2014/06/18/python-requests-encoding/
-    response.encoding =  response.apparent_encoding
-    page = response.text
+    # 解决乱码1 http://sh3ll.me/2014/06/18/python-requests-encoding/
+    # response.encoding =  response.apparent_encoding
+
+    # 解决乱码2 https://segmentfault.com/q/1010000000341014
+    page = response.text.encode('latin1').decode('gbk')
     soup = BeautifulSoup(page, "html.parser")
     return soup
 
