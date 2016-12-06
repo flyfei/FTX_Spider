@@ -5,24 +5,29 @@ var map = new AMap.Map('container',{
 map.setCity('石家庄市');
 
 var geocoder
-AMap.plugin('AMap.Geocoder',function(){
+AMap.plugin(['AMap.ToolBar', 'AMap.Geocoder'],function(){
     geocoder = new AMap.Geocoder({
         city: "0311"//城市，默认：“全国”
     });
+    map.addControl(new AMap.ToolBar());
     map.addControl(geocoder);
 });
 
-function getMarker (map, name) {
+function getMarker (map, house, markers) {
+    var name = house.name;
     geocoder.getLocation(name, function(status,result){
         if(status=='complete'&&result.geocodes.length){
             var marker = new AMap.Marker({
                 map: map,
                 position: result.geocodes[0].location
             });
+            marker.house = house
             marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
                 offset: new AMap.Pixel(20, 20),//修改label相对于maker的位置
                 content: name
             });
+            markers.push(marker);
+
             return marker
         }else{
             console.log('获取位置失败', name);
@@ -30,14 +35,12 @@ function getMarker (map, name) {
         }
     })
 }
+var markers = []
 function housesToMap (map, houses) {
-    var markers = []
+    markers = []
     var house
     for (house of houses) {
-        var marker = getMarker(map, house.name)
-        if (marker){
-            markers.push(marker);
-        }
+        getMarker(map, house, markers)
     }
 }
 
@@ -50,4 +53,22 @@ function housesToMap (map, houses) {
 //     'name': '蓝郡国际'
 // }]
 
-housesToMap(map, houses)
+function load () {
+    housesToMap(map, houses)
+}
+
+function filterHouses () {
+    var time = document.getElementById("form-time").value
+
+    var newMarkers = markers
+    if (time) {
+        newMarkers = markers.filter(function (marker) {
+            return marker.house.time.startsWith(time)
+        });
+    }
+    var oldMarker = map.getAllOverlays("marker");
+    map.remove(oldMarker);
+    map.add(newMarkers)
+    console.log("找到数量：", newMarkers.length , " 关键字：", time);
+    return false;
+}

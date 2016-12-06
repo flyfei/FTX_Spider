@@ -16,3 +16,8 @@ body,html,#container{
     overflow: hidden;
     line-height: 20px;
 }
+.tool {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
